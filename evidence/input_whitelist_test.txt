@@ -1,0 +1,31 @@
+==========================================
+UJI DEMO INPUT PEKERJAAN & WHITELIST
+==========================================
+
+[1] Skenario Positif (+): Input valid 'sleep 2'
+DITERIMA: Pekerjaan 'sleep 2' berhasil masuk ke antrean (data/antrean.txt).
+exit status: 0
+
+[2] Skenario Positif (+): Input valid 'echo Halo Sistem Operasi'
+DITERIMA: Pekerjaan 'echo Halo Sistem Operasi' berhasil masuk ke antrean (data/antrean.txt).
+exit status: 0
+
+[3] Skenario Negatif (-): Perintah di luar whitelist 'whoami'
+exit status: 1
+
+[4] Skenario Negatif (-): Parameter kosong/salah 'sleep'
+exit status: 2
+
+[5] Skenario Negatif (-): Indikasi command injection 'sleep 1; rm -rf /'
+exit status: 3
+
+=== Isi File Antrean (data/antrean.txt) ===
+sleep 2
+echo Halo Sistem Operasi
+
+=== Isi Log Pengajuan (logs/submit.log) ===
+21:56:42 DITERIMA (sleep 2) Exit=0
+21:56:42 DITERIMA (echo Halo Sistem Operasi) Exit=0
+21:56:42 DITOLAK (Non-Whitelist: whoami) Exit=1
+21:56:42 DITOLAK (Parameter Salah: sleep) Exit=2
+21:56:42 DITOLAK (Injeksi: sleep 1; rm -rf /) Exit=3
