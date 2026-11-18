@@ -22,7 +22,3 @@ while [ -s "$QUEUE" ]; do
         sed -i '1d' "$QUEUE"
 done
 exit $RC
-	bash -c "$JOB"
-	sed -i '1d' "$QUEUE"
-done
-
