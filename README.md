@@ -36,7 +36,7 @@ echo $?
 wait
 ```
 
-Hasil diharapkan: worker kedua mencetak `Worker lain sedang berjalan. Ditolak.` dan exit status `1`. Worker pertama tetap berjalan sampai selesai (`wait` menunggunya).
+Hasil diharapkan: worker kedua mencetak `Worker lain sedang berjalan` dan exit status `1`. Worker pertama tetap berjalan sampai selesai (`wait` menunggunya).
 
 ### Pemulihan
 

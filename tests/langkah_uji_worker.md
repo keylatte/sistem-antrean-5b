@@ -25,7 +25,7 @@ sleep 1
 echo $?
 wait
 ```
-Diharapkan: "Worker lain sedang berjalan. Ditolak.", exit status 1.
+Diharapkan: "Worker lain sedang berjalan", exit status 1.
 
 ## Pemulihan
 Isi ulang antrean: `cp tests/data/antrean_contoh.txt data/antrean.txt`. File lock lepas otomatis saat worker selesai.
