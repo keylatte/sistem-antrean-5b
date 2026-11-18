@@ -1,37 +1,41 @@
 #!/bin/bash
-# Mahasiswa 3: pencatatan status, PID, dan exit status pekerjaan
-# Pemakaian: status_job.sh <id_job> <perintah> [argumen...]
-# Status: MENUNGGU -> BERJALAN -> BERHASIL / GAGAL
+# status_job.sh - menjalankan satu pekerjaan, mencatat siklus statusnya:
+# MENUNGGU -> BERJALAN -> BERHASIL / GAGAL, lengkap dengan PID dan exit status.
+# Penggunaan : scripts/status_job.sh <perintah> [argumen...]
+# Exit status: 0 = berhasil, 2 = parameter kosong, lainnya = exit status asli pekerjaan
 
-BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_DIR="$BASE_DIR/logs"
-STATUS_LOG="$LOG_DIR/status.log"
-mkdir -p "$LOG_DIR"
+LOG_FILE="$LOG_DIR/status_job.log"
 
-catat() {  # id status pid exit keterangan
-  echo "$(date '+%Y-%m-%d %H:%M:%S') | JOB=$1 | STATUS=$2 | PID=$3 | EXIT=$4 | $5" >> "$STATUS_LOG"
-}
-
-if [ $# -lt 2 ]; then
-  echo "Pemakaian: $0 <id_job> <perintah> [argumen...]" >&2
+if [ $# -lt 1 ]; then
+  echo "Penggunaan: $0 <perintah> [argumen...]" >&2
   exit 2
 fi
 
-ID="$1"; shift
+mkdir -p "$LOG_DIR"
+JOB_ID="job-$(date +%s)-$$"
+NAMA_JOB="$*"
 
-catat "$ID" "MENUNGGU" "-" "-" "pekerjaan masuk: $*"
+# $1=status $2=pid $3=exit
+catat() {
+  printf '%s | %s | PID=%s | STATUS=%s | EXIT=%s | CMD=%s\n' \
+    "$(date '+%F %T')" "$JOB_ID" "$2" "$1" "$3" "$NAMA_JOB" | tee -a "$LOG_FILE"
+}
+
+catat "MENUNGGU" "-" "-"
 
 "$@" &
 PID=$!
-catat "$ID" "BERJALAN" "$PID" "-" "proses dimulai"
+catat "BERJALAN" "$PID" "-"
 
 wait "$PID"
 KODE=$?
 
 if [ "$KODE" -eq 0 ]; then
-  catat "$ID" "BERHASIL" "$PID" "$KODE" "selesai normal"
+  catat "BERHASIL" "$PID" "$KODE"
 else
-  catat "$ID" "GAGAL" "$PID" "$KODE" "exit status bukan nol"
+  catat "GAGAL" "$PID" "$KODE"
 fi
 
 exit "$KODE"

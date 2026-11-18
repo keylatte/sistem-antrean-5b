@@ -1,16 +1,24 @@
 #!/bin/bash
-cd "$(dirname "$0")/.." || exit 1
-rm -f logs/status.log
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-echo "=== SKENARIO POSITIF: pekerjaan normal (exit 0) ==="
-./scripts/status_job.sh JOB-001 sleep 1
+echo "== (+) Pekerjaan normal (sleep 1) =="
+echo '$ scripts/status_job.sh sleep 1'
+"$DIR/scripts/status_job.sh" sleep 1
 echo "exit status: $?"
-
 echo
-echo "=== SKENARIO NEGATIF: pekerjaan error (exit != 0) ==="
-./scripts/status_job.sh JOB-002 bash -c 'echo "simulasi error"; exit 3'
+
+echo "== (-) Pekerjaan error (exit 3) =="
+echo "\$ scripts/status_job.sh bash -c 'exit 3'"
+"$DIR/scripts/status_job.sh" bash -c 'exit 3'
 echo "exit status: $?"
-
 echo
-echo "=== ISI logs/status.log ==="
-cat logs/status.log
+
+echo "== (-) Tanpa parameter =="
+echo '$ scripts/status_job.sh'
+"$DIR/scripts/status_job.sh"
+echo "exit status: $?"
+echo
+
+echo "== Isi log (logs/status_job.log) =="
+tail -n 6 "$DIR/logs/status_job.log"
+
