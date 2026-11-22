@@ -6,7 +6,7 @@ mkdir -p output
 {
   echo "=== Monitoring [$LABEL] $(date '+%F %T') ==="
   for i in $(seq 1 "$DUR"); do
-    CPU=$(top -bn2 -d1 | awk '/Cpu\(s\)/ {v=100-$8} END{print v}')CPU=$(top -bn1 | awk '/Cpu\(s\)/ {print 100-$8}')
+    CPU=$(vmstat 1 2 | tail -1 | awk '{print 100-$15}')
     MEM=$(free -m | awk '/Mem:/ {print $3"/"$2" MB"}')
     echo "t=$i CPU=${CPU}% MEM=$MEM"
   done
