@@ -35,6 +35,13 @@ Sistem ini mengelola antrean pekerjaan sederhana di Linux (Bash): pekerjaan yang
 
 Format kolom tabel ini mengikuti contoh README kelompok lain. Seluruh isinya diambil dari bukti pengujian kelompok sendiri.
 
+ANGGOTA 1
+
+
+
+
+
+ANGGOTA 2
 ## Menjalankan sistem
 
 Jalankan semua perintah dari folder utama repository.
@@ -83,3 +90,44 @@ Rincian langkah dan hasil tiap uji ada di folder `evidence/`.
 ## Pemulihan
 
 Setelah uji, antrean kosong. Isi ulang dengan `cp tests/data/antrean_contoh.txt data/antrean.txt`. File lock lepas otomatis saat worker selesai.
+
+ANGGOTA 3
+
+
+
+ANGGOTA 4
+Lingkungan dan Instalasi
+Sistem dijalankan pada **Ubuntu 24.04 LTS** (Kernel `6.8.0`), **Bash `5.2.21`**, **`flock` `2.39.3`**, dan **Docker `27.3.1`** (`alpine:3.20`).
+
+## Izin Eksekusi dari folder utama proyek:
+git clone [https://github.com/ziyafauziyah14/sistem-antrean-5b.git](https://github.com/ziyafauziyah14/sistem-antrean-5b.git)
+cd sistem-antrean-5b
+mkdir -p data logs output
+chmod +x scripts/*.sh tests/*.sh config/*.sh
+
+## Menjalankan Sistem
+Jalankan semua perintah dari folder utama repository:
+./scripts/submit_job.sh sleep 2
+./scripts/worker.sh
+
+## Menguji Worker (Antrean FIFO dan Lock)
+Worker (scripts/worker.sh) memproses data/antrean.txt secara berurutan (baris teratas lebih dulu) dan memasang berkas lock /tmp/worker.lock agar worker kedua yang berjalan bersamaan ditolak.
+* Uji positif:
+cp tests/data/antrean_contoh.txt data/antrean.txt
+./scripts/worker.sh
+
+* Uji Negatif : durasi sleep harus lebih kecil dari MAX_TIMEOUT di config/queue.conf)
+  printf 'echo pekerjaan satu\nsleep 3\necho pekerjaan dua\n' > data/antrean.txt
+./scripts/worker.sh & sleep 1; ./scripts/worker.sh; echo \$?; wait
+
+## Menguji Komponen Lain
+Pengajuan dan whitelist: tests/uji_input_whitelist.sh
+Status, PID, exit status: tests/uji_status.sh
+Timeout: tests/job_cepat.sh (selesai sebelum batas) dan tests/job_lama.sh (melewati batas)
+Akses dan permission: config/setup_permission.sh dan tests/uji_permission.sh
+Docker read-only: tests/uji_docker_readonly.sh
+
+## Pemulihan
+Setelah pengujian selesai, antrean akan kosong. Isi ulang data contoh dan bersihkan log uji bila diperlukan:
+cp tests/data/antrean_contoh.txt data/antrean.txt
+rm -f logs/*.log
