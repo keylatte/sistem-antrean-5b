@@ -1,15 +1,13 @@
 Image: alpine:3.20
 == Checksum host (sebelum) ==
-1f426bada19f52cedc66633c8a16ec753e8b6fd4ae8c4573716cd8b1fa9f6fb6  output/laporan.txt
+6f1cfbfcd511db23a1eb3c1ee20c4c79bc9cb127c29169be4482d84d6e154b0d  output/laporan.txt
 == (+) Container membaca laporan.txt (bind mount read-only) ==
-=== Monitoring [beban-ringan] 2026-11-15 08:51:49 ===
-t=1 CPU=12.9CPU=57.1% MEM=2203/3379 MB
-t=2 CPU=0.8CPU=37.5% MEM=2203/3379 MB
-t=3 CPU=6.9CPU=100% MEM=2203/3379 MB
-t=4 CPU=1.4CPU=100% MEM=2203/3379 MB
-exit status: 0
+sudo: timed out
+exit status: 1
 == (-) Container mencoba menulis ke laporan.txt ==
-sh: can't create /data/laporan.txt: Read-only file system
+sudo: Authentication failed, try again.
+sudo: Authentication failed, try again.
+sudo: maximum 3 incorrect authentication attempts
 exit status: 1
 == Checksum host (sesudah) ==
-1f426bada19f52cedc66633c8a16ec753e8b6fd4ae8c4573716cd8b1fa9f6fb6  output/laporan.txt
+6f1cfbfcd511db23a1eb3c1ee20c4c79bc9cb127c29169be4482d84d6e154b0d  output/laporan.txt
