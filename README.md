@@ -95,15 +95,8 @@ ANGGOTA 3
 
 
 
-ANGGOTA 4
-Lingkungan dan Instalasi
-Sistem dijalankan pada **Ubuntu 24.04 LTS** (Kernel `6.8.0`), **Bash `5.2.21`**, **`flock` `2.39.3`**, dan **Docker `27.3.1`** (`alpine:3.20`).
+**ANGGOTA 4**
 
-## Izin Eksekusi dari folder utama proyek:
-git clone [https://github.com/ziyafauziyah14/sistem-antrean-5b.git](https://github.com/ziyafauziyah14/sistem-antrean-5b.git)
-cd sistem-antrean-5b
-mkdir -p data logs output
-chmod +x scripts/*.sh tests/*.sh config/*.sh
 
 ## Menjalankan Sistem
 Jalankan semua perintah dari folder utama repository:
