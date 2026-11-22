@@ -124,3 +124,48 @@ Docker read-only: tests/uji_docker_readonly.sh
 Setelah pengujian selesai, antrean akan kosong. Isi ulang data contoh dan bersihkan log uji bila diperlukan:
 cp tests/data/antrean_contoh.txt data/antrean.txt
 rm -f logs/*.log
+
+## Monitoring, Permission, dan Docker Read-Only (Anggota 5)
+
+### Instalasi (prasyarat)
+
+```bash
+sudo apt update && sudo apt install -y git docker.io
+sudo systemctl enable --now docker
+```
+
+Perintah Docker dijalankan dengan `sudo`.
+
+### Monitoring CPU/memori
+
+```bash
+./scripts/monitor.sh beban-ringan 5
+nice -n 19 yes > /dev/null &
+./scripts/monitor.sh beban-berat 5
+pkill yes
+```
+
+Hasil ditambahkan ke `output/laporan.txt`. Bukti: `evidence/monitoring_beban.txt`.
+
+### User dan permission
+
+```bash
+./config/setup_permission.sh
+./tests/uji_permission.sh
+```
+
+Skrip membuat grup `antrean`, akun `petugas` (anggota grup) dan `tamu` (bukan anggota), serta folder `/srv/antrean` (770, antrean 660). Hasil diharapkan: petugas menulis exit 0, tamu `Permission denied` exit 1.
+
+### Docker read-only
+
+```bash
+./tests/uji_docker_readonly.sh
+```
+
+Container `alpine:3.20` membaca `output/laporan.txt` lewat bind mount `readonly` (exit 0). Penulisan ditolak dengan `Read-only file system` (exit 1) dan checksum host sebelum dan sesudah sama.
+
+### Pemulihan (bagian Anggota 5)
+
+- `laporan.txt` belum ada atau kosong: jalankan `./scripts/monitor.sh` lebih dulu.
+- VM lambat karena beban tersisa: `pkill yes`.
+- Setup permission perlu diulang: jalankan lagi `./config/setup_permission.sh` (aman diulang).
